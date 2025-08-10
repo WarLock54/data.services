@@ -25,6 +25,9 @@
     <PackageReference Include="Serilog" Version="4.3.0" />
     <PackageReference Include="Serilog.Extensions.Hosting" Version="9.0.0" />
     <PackageReference Include="Serilog.Sinks.File" Version="6.0.0" />
+    <PackageReference Include="ServiceStack.Interfaces" Version="8.8.0" />
+    <PackageReference Include="ServiceStack.Redis" Version="8.8.0" />
+    <PackageReference Include="StackExchange.Redis" Version="2.8.58" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.3" />
   </ItemGroup>
 
@@ -39,6 +42,10 @@
     <Reference Include="SimplePatch">
       <HintPath>..\..\BaseDlls\SimplePatch\SimplePatch.dll</HintPath>
     </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="RedisServices\" />
   </ItemGroup>
 
 </Project>

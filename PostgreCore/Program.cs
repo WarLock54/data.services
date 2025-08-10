@@ -13,6 +13,8 @@ using Newtonsoft.Json.Serialization;
 using Persistence;
 using PostgreCore;
 using ServiceStack;
+using ServiceStack.Redis;
+using StackExchange.Redis;
 using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -46,11 +48,21 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
                         new AcceptLanguageHeaderRequestCultureProvider()
                     };
 });
+// redis connection config 
+builder.Services.AddSingleton<LocationService>();
+builder.Services.AddSingleton<IConnectionMultiplexer>(opt =>
+{
+    var redisUrl = builder.Configuration.GetConnectionString("Redis");
+    return ConnectionMultiplexer.Connect(redisUrl);
+});
+builder.Services.AddSingleton<IRedisClientsManager>(c =>
+      new RedisManagerPool("localhost:6379"));
 
 builder.Services.AddSwaggerGen(option =>
 {
     option.SwaggerDoc("Productgroup", new OpenApiInfo { Title = "(PRODUCT)", Version = "v1" });
     option.SwaggerDoc("Marketgroup", new OpenApiInfo { Title = "(MARKET)", Version = "v1" });
+    option.SwaggerDoc("Locationgroup", new OpenApiInfo { Title= "Location",Version = "v1"});
     option.SwaggerDoc("common", new OpenApiInfo { Title = "(Common)", Version = "v1" });
 
     // Filter APIs into the correct documents based on custom logic
@@ -59,10 +71,12 @@ builder.Services.AddSwaggerGen(option =>
         var controllerName = apiDesc.ActionDescriptor.RouteValues["controller"] + "";
         bool ProductGroup = (controllerName.StartsWith("Product"));
         bool MarketGroup = (controllerName.StartsWith("Market"));
-        bool commonGroup = !ProductGroup && !MarketGroup;
+        bool LocationGroup = (controllerName.StartsWith("Location"));
+        bool commonGroup = !ProductGroup && !MarketGroup && !LocationGroup;
 
         if (docName == "Productgroup" && ProductGroup) return true;
         else if (docName == "Marketgroup" && MarketGroup) return true;
+        else if (docName == "LocationGroup" && LocationGroup) return true;
         else if (docName == "common" && commonGroup) return true;
         return false;
     });

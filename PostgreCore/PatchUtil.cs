@@ -15,6 +15,10 @@ namespace PostgreCore
             {
                 cfg.AddEntity<Product>();
                 cfg.AddEntity<Market>();
+                cfg.AddEntity<Location>();
+                cfg.AddEntity<LocationDate>();
+                cfg.AddEntity<GeoResult>();
+                cfg.AddEntity<FindGeo>();
             });
         }
     }

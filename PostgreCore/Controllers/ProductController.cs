@@ -5,6 +5,10 @@ using Model;
 
 namespace PostgreCore.Controllers
 {
-    public partial class ProductController : DaBDataController<Product, long, ProductBs> { };
+    public partial class ProductController : DaBDataController<Product, long, ProductBs> {
+        public ProductController(IRedisService<Product> redisService) : base(redisService)
+        {
+        }
+    };
 
 }

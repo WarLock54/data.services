@@ -48,6 +48,80 @@ namespace PostgreCore
             return __bs;
         }
 
+        //redis
+        private readonly IRedisService<TEntity> _redisService;
+
+        public DaBDataController(IRedisService<TEntity> redisService = null)
+        {
+            _redisService = redisService;
+        }
+        #region Redis Opsiyonel Metodlar
+
+        [HttpGet("Redis/{key}")]
+        public async Task<IActionResult> GetFromRedis(string key)
+        {
+            if (_redisService == null)
+                return NotFound("Redis servis aktif değil.");
+
+            var entity = await _redisService.FindAsync(key);
+            if (entity == null)
+                return NotFound();
+            return GetJsonResult(entity);
+        }
+
+        [HttpPost("Redis")]
+        public async Task<IActionResult> AddToRedis([FromBody] TEntity data)
+        {
+            if (_redisService == null)
+                return NotFound("Redis servis aktif değil.");
+            if (data == null)
+                return BadRequest("Key ve entity zorunludur.");
+
+            await _redisService.AddAsync(data);
+            return Ok();
+        }
+
+        [HttpPut("Redis/{key}")]
+        public async Task<IActionResult> UpdateRedis(string key, [FromBody] TEntity entity)
+        {
+            if (_redisService == null)
+                return NotFound("Redis servis aktif değil.");
+            if (entity == null)
+                return BadRequest("Entity boş olamaz.");
+
+            await _redisService.UpdateAsync(key, entity);
+            return Ok();
+        }
+
+        [HttpPatch("Redis/{key}")]
+        public async Task<IActionResult> PatchRedis(string key, [FromBody] Delta<TEntity> entityPatch)
+        {
+            if (_redisService == null)
+                return NotFound("Redis servis aktif değil.");
+            if (entityPatch == null)
+                return BadRequest("Patch veri boş olamaz.");
+
+            var existingEntity = await _redisService.FindAsync(key);
+            if (existingEntity == null)
+                return NotFound();
+
+            entityPatch.Patch(existingEntity);
+            await _redisService.UpdateAsync(key, existingEntity);
+
+            return Ok();
+        }
+
+        [HttpDelete("Redis/{key}")]
+        public async Task<IActionResult> DeleteFromRedis(string key)
+        {
+            if (_redisService == null)
+                return NotFound("Redis servis aktif değil.");
+
+            await _redisService.DeleteAsync(key);
+            return Ok();
+        }
+
+        #endregion
         private SSSessionInfo _session; // new TBS();
         internal SSSessionInfo Session
         {
