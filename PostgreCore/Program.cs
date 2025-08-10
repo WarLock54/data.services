@@ -49,7 +49,7 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
                     };
 });
 // redis connection config 
-builder.Services.AddSingleton<LocationService>();
+builder.Services.AddSingleton(typeof(IRedisService<>), typeof(RedisService<>));
 builder.Services.AddSingleton<IConnectionMultiplexer>(opt =>
 {
     var redisUrl = builder.Configuration.GetConnectionString("Redis");
