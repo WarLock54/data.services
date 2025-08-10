@@ -4,5 +4,9 @@ using Model;
 
 namespace PostgreCore.Controllers
 {
-    public partial class MarketController : DaBDataController<Market, long, MarketBs> { };
+    public partial class MarketController : DaBDataController<Market, long, MarketBs> {
+        public MarketController(IRedisService<Market> redisService) : base(redisService)
+        {
+        }
+    };
 }
