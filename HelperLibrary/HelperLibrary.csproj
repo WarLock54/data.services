@@ -15,4 +15,8 @@
     <PackageReference Include="ServiceStack" Version="8.8.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Model\Model.csproj" />
+  </ItemGroup>
+
 </Project>

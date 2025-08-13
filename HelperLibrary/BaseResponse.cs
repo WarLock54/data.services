@@ -10,7 +10,7 @@ namespace HelperLibrary
         public string ErrorMessage { set; get; }
         public string[] Errors { set; get; }
         public string[] Warnings { set; get; }
-
+        public Error Error { get; set; }
         public string[] ErrorDetails { get; set; }
 
         public int TotalPages { set; get; }
@@ -123,5 +123,14 @@ namespace HelperLibrary
             this.Inherit(source);
             return this;
         }
+    }
+    public class LoginDeviceResponse : BaseResponse
+    {
+        public string DeviceUUID { get; set; }
+    }
+
+    public class SendFcmResponse : BaseResponse
+    {
+        public int MessageId { get; set; }
     }
 }

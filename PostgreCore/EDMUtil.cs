@@ -13,10 +13,12 @@ namespace PostgreCore
            ODataConventionModelBuilder builder = new ODataConventionModelBuilder();
             builder.EntitySet<Market>("Market");
             builder.EntitySet<Product>("Product");
-            builder.EntitySet<Market>("Location");
-            builder.EntitySet<Product>("LocationDate");
-            builder.EntitySet<Market>("GeoResult");
-            builder.EntitySet<Product>("FindGeo");
+            builder.EntitySet<Location>("Location");
+            builder.EntitySet<LocationDate>("LocationDate");
+            builder.EntitySet<GeoResult>("GeoResult");
+            builder.EntitySet<FindGeo>("FindGeo");
+            builder.EntitySet<MesajSablon>("MesajSablon");
+            builder.EntitySet<Customer>("Customer");
             BuildFunctions(builder);
 
             var model = builder.GetEdmModel();

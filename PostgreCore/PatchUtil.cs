@@ -19,6 +19,8 @@ namespace PostgreCore
                 cfg.AddEntity<LocationDate>();
                 cfg.AddEntity<GeoResult>();
                 cfg.AddEntity<FindGeo>();
+                cfg.AddEntity<MesajSablon>();
+                cfg.AddEntity<Customer>();
             });
         }
     }

@@ -133,7 +133,7 @@ namespace Business
 
         public IStringLocalizer _localizer;
         public ApplicationDbContext context { get; set; }
-        public Ssesion Ssesion { get; set; }
+        public SSSessionInfo Ssesion { get; set; }
 
         internal bool ConvertDateTimeToDate = true;
 
@@ -158,11 +158,11 @@ namespace Business
         {
             _localizer = new CustomLocalizer();
         }
-        public Core(Ssesion _ssesion)
+        public Core(SSSessionInfo _ssesion)
         {
             Ssesion = _ssesion;
         }
-        public Core(Ssesion _ssesion,ApplicationDbContext ApplicationDbContext)
+        public Core(SSSessionInfo _ssesion,ApplicationDbContext ApplicationDbContext)
         {
             if(_ssesion==null)
                 Ssesion = _ssesion;
