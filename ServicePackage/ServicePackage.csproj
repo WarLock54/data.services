@@ -20,6 +20,7 @@
   <ItemGroup>
     <ProjectReference Include="..\HelperLibrary\HelperLibrary.csproj" />
     <ProjectReference Include="..\Persistence\Persistence.csproj" />
+	  <ProjectReference Include="..\Business\Business.csproj" />
   </ItemGroup>
 
 </Project>

@@ -13,7 +13,7 @@ namespace ServicePackage
             List<string> corsUrls = new List<string>() {
                 
                 "ionic://localhost","capacitor://localhost",
-                "http://localhost",
+                "http://localhost", "https://localhost:44306","http://localhost:44306"
             };
 
             #region LocalNetwork
@@ -32,14 +32,16 @@ namespace ServicePackage
                     "http://localhost:8080",
                     "http://localhost:5431",
                     "http://localhost:56110",
-                    "http://localhost:4200"
+                    "http://localhost:4200",
+                    "https://localhost:44306",
+                    "http://localhost:44306"
 
             });
-
+            //44306
             for (int i = 2; i <= 254; i++)
             {
-                corsUrls.Add(string.Format("http://192.168.11.{0}:8101", i.ToString()));
-                corsUrls.Add(string.Format("http://192.168.11.{0}:8100", i.ToString()));
+                corsUrls.Add(string.Format("http://127.0.0.1.{0}:8101", i.ToString()));
+                corsUrls.Add(string.Format("http://127.0.0.{0}:8100", i.ToString()));
             }
 
             #endregion LocalNetwork
@@ -68,7 +70,7 @@ namespace ServicePackage
             var authFeature = new AuthFeature(() => new AuthUserSession(),
                                             new IAuthProvider[] {
                                                     new CustomJwtAuthProvider(appSetting) {
-                                                        AuthKey =  System.Text.Encoding.UTF8.GetBytes("Onur"),
+                                                        AuthKey =  System.Text.Encoding.UTF8.GetBytes("JwtBearer"),
                                                         RequireSecureConnection = false,
                                                     }
                                             });

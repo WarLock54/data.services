@@ -3,8 +3,10 @@ using Business.IServices;
 using Microsoft.AspNetCore.Mvc;
 using Model;
 
-namespace PostgreCore.Controllers
+namespace PostgreCore
 {
+    [ApiController]
+    [Route("[controller]")]
     public partial class ProductController : DaBDataController<Product, long, ProductBs> {
         public ProductController(IRedisService<Product> redisService) : base(redisService)
         {

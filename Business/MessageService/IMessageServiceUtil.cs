@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 namespace Business
 {
-    public interface IMessageServiceUtil
+    public partial interface IMessageServiceUtil
     {
         Task<MesajSablon> GetMessageTemplateAsync(MessageTemplateTypes templateType, string templateCode);
         Task<string> BindMessageParamsAsync(string messageText, Dictionary<string, string> parameters);

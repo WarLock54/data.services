@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace Business
 {
     
-    public class MessageServiceUtil
+    public partial class MessageServiceUtil
     : IMessageServiceUtil
     {
         private readonly IMapper _mapper;

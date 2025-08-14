@@ -2,8 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Model;
 
-namespace PostgreCore.Controllers
+namespace PostgreCore
 {
+    [ApiController]
+    [Route("[controller]")]
     public class LocationController : DaBDataController<Location, long, LocationBs>
     {
         public LocationController(IRedisService<Location> redisService) : base(redisService)

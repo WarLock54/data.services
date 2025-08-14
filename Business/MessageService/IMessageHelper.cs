@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Business.MessageService
+namespace Business
 {
-    public interface IMessageHelper
+    public partial interface IMessageHelper
     {
         Task<BaseResultDTO> LoginFCMTokenRequest(LoginDeviceRequestDTO request);
         Task<BaseResultDTO> LogoutFCMTokenRequest(LogoutDeviceRequestDTO request);

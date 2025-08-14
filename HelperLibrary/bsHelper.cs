@@ -30,7 +30,7 @@ namespace HelperLibrary
             return myPropInfo == null ? null : myPropInfo;
         }
         public static IQueryable<E> ApplyFinalPredicate(IQueryable<E> dbQuery, Expression<Func<E, bool>> QUERYpredicate, Expression<Func<E, bool>> bsPredicate) {
-            IQueryable<E> query= dbQuery.AsQueryable();
+            IQueryable<E> query = dbQuery;
             if(bsPredicate != null)
                 query = query.Where(bsPredicate);
             if(QUERYpredicate!=null)

@@ -3,6 +3,7 @@ using DevExtreme.AspNet.Data;
 using DevExtreme.AspNet.Data.Helpers;
 using FluentValidation.Results;
 using HelperLibrary;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OData;
 using Model;
@@ -15,6 +16,7 @@ using System.Web;
 
 namespace PostgreCore
 {
+    [Authorize(AuthenticationSchemes = "JwtBearer")]
     [Microsoft.AspNetCore.Mvc.Route("api/[controller]")]
     [ApiController]
     public class DaBDataController<TEntity, P, TBS> : Controller
@@ -143,8 +145,8 @@ namespace PostgreCore
                 using var tBs = CreateBs();
                 var qs = HttpUtility.ParseQueryString(Request.QueryString.Value ?? "");
                 tBs.qs = qs;
-                var status = !qs["status"].ToString().IsNullOrEmpty() ? qs["status"].ToString().ToUpper() : "";
-                if(status == "A")
+                var status = (qs["status"] ?? string.Empty).ToUpper();
+                if (status == "A")
                 {
                     return GetJsonResult(tBs.GetAllowedActions());
                 }
@@ -160,7 +162,7 @@ namespace PostgreCore
             }
         }
         // id sini gönder obje olarak geri dönsün.
-        [HttpGet]
+        [HttpGet("{key}")]
         public async Task<IActionResult> Get(P key)
         {
             try
@@ -169,7 +171,7 @@ namespace PostgreCore
                 var qs = HttpUtility.ParseQueryString(Request.QueryString.Value ?? "");
                 tBs.qs = qs;
 
-                var status = !qs["status"].ToString().IsNullOrEmpty() ? qs["status"].ToString().ToUpper() : " ";
+                var status = (qs["status"] ?? string.Empty).ToUpper();
                 bool allowedAction = false;
                 Dto dto = null;
                 if (status == "A" || status == "E") {
@@ -211,8 +213,8 @@ namespace PostgreCore
                     return GetError_NullEntity("Post");
                 using var tBs = CreateBs();
                 var qs = HttpUtility.ParseQueryString(Request.QueryString.Value ?? "");
-                tBs.qs = qs;
-                var status = !qs["status"].ToString().IsNullOrEmpty() ? qs["status"].ToString().ToUpper() : "";
+                tBs.qs = qs;   
+                var status = (qs["status"] ?? string.Empty).ToUpper();
                 bool allowedAction = false;
                 Dto dto = null;
                 if(status == "V")
@@ -265,7 +267,7 @@ namespace PostgreCore
                     });
                 }
                 entity.Patch(originalEntity);
-                var status = !qs["status"].ToString().IsNullOrEmpty() ? qs["status"].ToString().ToUpper() : "";  // Get Allowed Actions
+                var status = (qs["status"] ?? string.Empty).ToUpper();  // Get Allowed Actions
                 if (status == "V")
                 {
                     var vRes = await tBs.Validate(originalEntity, DBActions.Update);
@@ -328,7 +330,7 @@ namespace PostgreCore
                 using var tBs = CreateBs();
                 var qs = HttpUtility.ParseQueryString(Request.QueryString.Value ?? "");
                 tBs.qs = qs;
-                var res = await tBs.RemoveAsync(key).ConfigureAwait(true);
+                var res = await tBs.RemoveAsync(key);
                 if (res.Result)
                     return Ok();
                 else if (res.Error.ErrorCode == "NotFound")

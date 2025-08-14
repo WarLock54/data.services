@@ -55,12 +55,9 @@ namespace Business
                 _context = value;
             }
         }
-        public ApplicationDbContext GetContext(bool newContext=false)
+        public ApplicationDbContext GetContext()
         {
-            if (!newContext)
-                return context;
-            else
-                return new ApplicationDbContext();
+            return new ApplicationDbContext();
         }
         private SSSessionInfo _session;
         public SSSessionInfo Session
@@ -417,6 +414,7 @@ namespace Business
         }
         #endregion
         #region async crud 
+
         public async Task<BsResult<E>> AddAsync(E item, bool saveChangesYn = true, bool IsExceptionDetachEntryYn = false)
         {
             try
@@ -502,7 +500,7 @@ namespace Business
         {
             try
             {
-                var item = GetSingleByPk(Kod);
+                var item = GetByPK(Kod);
                 if (item != null)
                 {
                     var res = PreUpdateAction(DBActions.Remove, item);
@@ -513,7 +511,11 @@ namespace Business
                     {
                         context.Entry(item).State = EntityState.Deleted;
                         var cnt = await context.SaveChangesAsync();
-                        if(cnt<0)
+                        if (cnt > 0)
+                        {
+                            return BsOk(null);
+                        }
+                        if (cnt<0)
                             return BsError("Kayıt Bulunamadı", "NotFound");
                     }
                     else
@@ -572,6 +574,7 @@ namespace Business
         }
         private BsResult<E> SetReqValues(ApplicationDbContext context, E item, DBActions Action, bool onlyValidation = false)
         {
+            context = GetContext();
             var entity = context.Entry(item);
             try
             {
@@ -622,7 +625,7 @@ namespace Business
 
         private BsResult<E> PreUpdateAction(DBActions Action, E item, bool onlyValidation = false)
         {
-
+            var context = GetContext();
             var res = SetReqValues(context, item, Action);
             if (!res.Result) return res;
             BaseValidator<E> FValidator;
@@ -727,6 +730,7 @@ namespace Business
         }
         internal void SetPKCode(E item)
         {
+            context = GetContext();
             try
             {
                 if (typeof(P).IsNumericType())
@@ -772,10 +776,22 @@ namespace Business
                 }
             }
         }
-        public E GetSingleByPk(P Key)
+
+        public E GetByPK(P key)
+        {
+            var customAddRes = GetEntity(key);
+            if (customAddRes.Message == "Use_BsCore")
+            {
+                return GetSingleByPk(key, false);
+            }
+            else
+                return customAddRes.Value;
+        }
+        public E GetSingleByPk(P Key, bool AsNoTracking = false)
         {
             try
             {
+                context = GetContext();
                 E data;
                 IQueryable<E> dbquery=context.Set<E>();
                 string prop = context.Model.FindEntityType(typeof(E)).FindPrimaryKey().Properties.Select(x => x.Name).Single();
@@ -802,6 +818,7 @@ namespace Business
         public BsResult<E> GetNew(NameValueCollection name,bool forInsert = false)
         {
             E item = null;
+            context = GetContext();
             var allowedActions = GetAllowedActions(default(P));
             if(allowedActions.AllowInsert)
                 return BsError(allowedActions.InsertMessage.IsNullOrEmpty()?"Yetki yok":allowedActions.InsertMessage);
@@ -876,7 +893,9 @@ namespace Business
         }
         public IQueryable<E> GetQueryableList(NameValueCollection name,Expression<Func<E,bool>> where1,params Expression<Func<E, object>>[] navigationProperties)
         {
-            try {
+            context = GetContext();
+            try
+            {
                 IQueryable<E> dbquery=context.Set<E>();
                 if (navigationProperties != null)
                 {
@@ -912,6 +931,7 @@ namespace Business
         }
         public E GetSingle(Expression<Func<E,bool>> where,params Expression<Func<E, object>>[] navigationProperties)
         {
+            context = GetContext();
             E item;
             try {
             IQueryable<E> query=context.Set<E>();
