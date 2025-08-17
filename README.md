@@ -1,4 +1,3 @@
-<img width="147" height="57" alt="image" src="https://github.com/user-attachments/assets/3771725a-37fb-448f-ba80-f823eff25128" /># data.services
 This project is a backend service developed on .NET Core using a layered architecture. It leverages ServiceStack for RESTful APIs and DevExpress for the management panel and reporting features. PostgreSQL is used as the primary high-performance database. Recently, Redis has been integrated to enhance caching, data retrieval speed, and support geo-based queries, improving overall system scalability and responsiveness. The project focuses on building a scalable, maintainable, and high-performance system based on modern design principles.
 <img width="1174" height="604" alt="image" src="https://github.com/user-attachments/assets/943ef4a2-f1bf-44f8-814c-21742ee51fa3" />
 For AI CODE REWIEVER
