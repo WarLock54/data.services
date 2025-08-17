@@ -1,13 +1,14 @@
 ﻿using Funq;
+using Microsoft.Extensions.Caching.Memory;
+using Newtonsoft.Json.Linq;
+using ServicePackage;
+using ServicePackages;
 using ServiceStack;
-using System.Net;
-using ServiceStack.Auth;
 using ServiceStack.Api.OpenApi;
 using ServiceStack.Api.OpenApi.Specification;
-using Newtonsoft.Json.Linq;
+using ServiceStack.Auth;
 using ServiceStack.Text;
-using Microsoft.Extensions.Caching.Memory;
-using ServicePackage;
+using System.Net;
 
 [assembly: HostingStartup(typeof(AppHost))]
 
@@ -26,17 +27,16 @@ public class AppHost : AppHostBase, IHostingStartup
             string licenseKey = configuration.GetRequiredSection("servicestack:license").Value;
             /*Microsoft.Extensions.Configuration.Configuration["servicestack:license"];*/
 
-            Licensing.RegisterLicense(licenseKey);
+         //   Licensing.RegisterLicense(licenseKey);
             services.AddAuthentication("Bearer")
    .AddJwtBearer("Bearer", options =>
    {
        options.RequireHttpsMetadata = false;
    });
         });
-
-    public AppHost() : base("ServicePackage"
-       // typeof(GenServices).Assembly,
-        //typeof(GenYetkiServices).Assembly
+    //servisler buraya eklenmeli
+    public AppHost() : base("ServicePackage",
+       typeof(MultiInsertServices).Assembly
         )
     { }
 

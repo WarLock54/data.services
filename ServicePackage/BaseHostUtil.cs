@@ -14,6 +14,7 @@ namespace ServicePackage
                 
                 "ionic://localhost","capacitor://localhost",
                 "http://localhost", "https://localhost:44306","http://localhost:44306"
+                , "https://localhost:5001","http://localhost:5001"
             };
 
             #region LocalNetwork
@@ -34,7 +35,9 @@ namespace ServicePackage
                     "http://localhost:56110",
                     "http://localhost:4200",
                     "https://localhost:44306",
-                    "http://localhost:44306"
+                    "http://localhost:44306",
+                    "https://localhost:5001",
+                    "http://localhost:5001"
 
             });
             //44306
