@@ -185,7 +185,17 @@ public class Program
             options.UseNpgsql("Host=localhost;Port=5432;Username=postgres;Password=admin;Database=netCore");
         });
 
-
+        builder.Services.AddRate Limiter (rateLimiterOptions =>
+            {
+                options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+                rateLimiterOptions.AddTokenBucketLimiter("token", options =>
+            {
+                options.TokenLimit = 1000;
+                options.ReplenishmentPeriod = TimeSpan. FromHours(1);
+                options.TokensPerPeriod = 700;
+                options.AutoReplenishment = true;
+                });
+            });
         var app = builder.Build();
         app.UseMiddleware<ExceptionMiddleware>();
         if (app.Environment.IsDevelopment())
